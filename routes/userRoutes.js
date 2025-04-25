@@ -1,8 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const UserToken = require("../models/UserToken"); // ✅ Correct model
+const UserToken = require("../models/UserToken");
 
-// GET all user tokens
 router.get("/", async (req, res) => {
   try {
     const users = await UserToken.find().sort({ createdAt: -1 });
@@ -12,7 +11,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// DELETE user token by ID
 router.delete("/:id", async (req, res) => {
   try {
     await UserToken.findByIdAndDelete(req.params.id);

@@ -28,7 +28,6 @@ const getUnreadEmails = async (access_token) => {
 
     results.push({ from, subject });
 
-    // ✅ Mark email as read
     await gmail.users.messages.modify({
       userId: "me",
       id: msg.id,

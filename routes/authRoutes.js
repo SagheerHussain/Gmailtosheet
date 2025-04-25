@@ -24,10 +24,9 @@ router.get("/callback", async (req, res) => {
     const access_token = tokens.access_token;
     const refresh_token = tokens.refresh_token;
 
-    // ✅ Get user email
+   
     const user = await getUserInfo(access_token);
 
-    // ✅ Save to MongoDB (if not already exists)
     const existing = await UserToken.findOne({ email: user.email });
     if (!existing && refresh_token) {
       await UserToken.create({
@@ -36,18 +35,18 @@ router.get("/callback", async (req, res) => {
       });
     }
 
-    // ✅ Fetch unread emails
+    
     const emails = await getUnreadEmails(access_token);
 
-    // ✅ Prepare rows for sheet
+    
     const rows = emails.map((email) => [user.email, email.from, email.subject]);
 
-    // ✅ Write to Google Sheet
+    
     await writeToSheet(access_token, rows);
 
-    res.send("✅ Email sync complete. You can close this tab.");
+    res.send("Email sync complete. You can close this tab.");
   } catch (err) {
-    console.error("❌ Error during /callback:", err); // ⬅ Show full error
+    console.error("Error during /callback:", err);
     res.status(500).send("Something went wrong: " + err.message);
   }
 });

@@ -7,7 +7,6 @@ const oauth2Client = new google.auth.OAuth2(
   process.env.REDIRECT_URI
 );
 
-// 🔹 Step 1: Generate Login URL
 const getGoogleAuthURL = () => {
   const scopes = [
     "https://www.googleapis.com/auth/gmail.readonly",
@@ -24,25 +23,22 @@ const getGoogleAuthURL = () => {
   });
 };
 
-// 🔹 Step 2: Exchange code for tokens
 const getTokensFromCode = async (code) => {
   const { tokens } = await oauth2Client.getToken(code);
   return tokens;
 };
 
-// 🔹 Step 3: Refresh access token
 const getAccessTokenFromRefresh = async (refresh_token) => {
   oauth2Client.setCredentials({ refresh_token });
   const { credentials } = await oauth2Client.refreshAccessToken();
   return credentials.access_token;
 };
 
-// 🔹 Step 4: Get logged-in user info
 const getUserInfo = async (access_token) => {
   oauth2Client.setCredentials({ access_token });
   const oauth2 = google.oauth2({ version: "v2", auth: oauth2Client });
   const res = await oauth2.userinfo.get();
-  return res.data; // includes email, name, etc.
+  return res.data;
 };
 
 module.exports = {
